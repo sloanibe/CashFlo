@@ -1,0 +1,92 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<h:head>
+    <title>CashFlo Time</title>
+</h:head>
+
+
+<h:body id="body">
+    <h:form id="form">
+        <p:growl id="messages" showDetail="true"/>
+        <p:toolbar>
+            <f:facet name="left">
+                <p:selectOneRadio id="console" value="#{calController.eventDisplay}">
+                    <f:selectItem itemLabel="Summary" itemValue="summary"/>
+                    <f:selectItem itemLabel="Exp" itemValue="exp"/>
+                    <f:selectItem itemLabel="Inc" itemValue="inc"/>
+                    <p:ajax  listener="#{calController.updateEventModel}" partialSubmit="true" update="schedule"/>
+                </p:selectOneRadio>
+
+            </f:facet>
+
+        </p:toolbar>
+
+
+        <p:schedule  initialDate="#{calController.selectedCashFloDate}" leftHeaderTemplate="prev,next" draggable="false" resizable="false" rightHeaderTemplate=""
+                    id="schedule" value="#{calController.eventModel}" widgetVar="myschedule" aspectRatio="2.0" >
+
+            <p:ajax event="eventSelect"  listener="#{calController.onEventSelect}" update="dialog,eventDetails,dataTable"
+                                                                            oncomplete="handleComplete(xhr, status, args)"/>
+
+            <p:ajax event="dateSelect"  listener="#{calController.onDateSelect}" update="dialog,eventDetails,dataTable"
+                    oncomplete="handleComplete(xhr, status, args)"/>
+
+
+        </p:schedule>
+
+
+
+
+        <p:dialog width="300" height="150" id="dialog" widgetVar="eventDialog" header="#{calController.dialogHdr}" showEffect="clip"
+                  hideEffect="clip" position="top">
+            <h:panelGrid id="eventDetails" columns="2">
+                <h:outputLabel style="width: 70px" for="amt" value="Amt:"/>
+                <p:inputText style="width: 70px" id="amt" value="#{calController.amt}" required="true" />
+                <h:outputLabel style="width: 70px" for="name" value="Name:"/>
+                <p:inputText style="width: 140px" id="name" value="#{calController.name}" required="true"/>
+                <h:outputLabel style="width: 70px" for="company" value="Company:"/>
+                <p:inputText style="width: 140px" id="company" value="#{calController.org}" required="true"/>
+                <p:commandButton ajax="true" id="saveButton"
+                                 value="#{calController.dialogBtnName}"
+                                 action="#{calController.addEvent}" update="schedule, dialog"/>
+                <p:commandButton ajax="true" id="deleteButton" disabled="#{calController.deleteBtnDisabled}"
+                                 value="Delete"
+                                 action="#{calController.deleteEvent}" oncomplete="PF('myschedule').update();"/>
+            </h:panelGrid>
+            <p:dataTable id="dataTable" widgetVar="myDataTable" var="cashFloRec" value="#{calController.recs1}"
+                         selectionMode="single" selection="#{calController.dialogSelectedCashFloRec}"
+                         rowKey="#{cashFloRec.id}">
+                <p:ajax event="rowSelect" listener="#{calController.onRowSelect}" update=":form:eventDetails"/>
+                <p:column headerText="Amt">
+                    <h:outputText value="#{cashFloRec.amt}"/>
+                </p:column>
+                <p:column headerText="Name">
+                    <h:outputText value="#{cashFloRec.name}"/>
+                </p:column>
+                <p:column headerText="Company">
+                    <h:outputText value="#{cashFloRec.org}"/>
+                </p:column>
+            </p:dataTable>
+        </p:dialog>
+
+        <h:outputScript id="handleCompleteScript" target="body">
+            /* <![CDATA[ */
+            function handleComplete(xhr, status, args) {
+                if (args && args.noDialogDisplay) {
+                    PF('eventDialog').hide();
+                } else {
+                    PF('eventDialog').show();
+                }
+            }
+
+            /* ]]> */
+        </h:outputScript>
+
+    </h:form>
+</h:body>
+
+</html>
