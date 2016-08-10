@@ -70,8 +70,7 @@ class CalController extends Serializable {
 
   }
 
-  def updateRecurrenceModel() {
-    println("in recurrence")
+  def updateRecurrenceModel() {\n    println(\"in recurrence")
   }
 
   def parseLine(line:String) : CashFloRec = {
@@ -129,6 +128,7 @@ class CalController extends Serializable {
         for (cashFloRec <- cfd.getExpenditures()) {
           val expEvent: DefaultScheduleEvent = new DefaultScheduleEvent(cashFloRec.getName + ":" + round2(cashFloRec.getAmt) + ":" + cashFloRec.getOrg, cfd.date, cfd.date)
           expEvent.setAllDay(true)
+          test
           eventModel.addEvent(expEvent)
 
         }
