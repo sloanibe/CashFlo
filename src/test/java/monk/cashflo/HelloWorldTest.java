@@ -12,7 +12,7 @@ public class HelloWorldTest {
     @Before
     public void setUp() throws Exception {
         helloWorld = new HelloWorld();
-        System.out.println("test1");
+        System.out.println("test2");
     }
 
     @Test
