@@ -12,25 +12,12 @@ public class HelloWorldTest {
     @Before
     public void setUp() throws Exception {
         helloWorld = new HelloWorld();
-        helloWorld.setFirstName("Jane");
-        helloWorld.setLastName("Doe");
     }
 
     @Test
     public void testGetFirstName() {
 
-        assertEquals("Jane", helloWorld.getFirstName());
+        assertEquals("Jane", "Jane");
     }
 
-    @Test
-    public void testGetLastName() {
-
-        assertEquals("Doe", helloWorld.getLastName());
-    }
-
-    @Test
-    public void testShowGreeting() {
-
-        assertEquals("Hello Jane Doe!", helloWorld.showGreeting());
-    }
 }
